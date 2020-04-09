@@ -1,0 +1,7 @@
+let config = {
+type: Phaser.CANVAS, /*Loads 2d web engine*/
+width: 640, /*game width (adjustable)*/
+height: 480, /*game height (adjustable)*/
+};
+
+let game = new Phaser.Game(config);/*Loads game*/
