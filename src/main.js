@@ -6,3 +6,5 @@ scene: [ Menu, Play ],
 };
 
 let game = new Phaser.Game(config);/*Loads game*/
+
+let keySPACE, keyLEFT, keyRIGHT;
