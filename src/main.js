@@ -7,4 +7,10 @@ scene: [ Menu, Play ],
 
 let game = new Phaser.Game(config);/*Loads game*/
 
+//Game difficulty
+game.settings = {
+    spaceshipSpeed: 3,
+    gameTimer: 60000
+}
+
 let keySPACE, keyLEFT, keyRIGHT;
