@@ -5,10 +5,10 @@ class Play extends Phaser.Scene{
 
     preload(){
         //loads images and tile sprites
-        this.load.image('rocket', "./assets/rocket.png");
+        this.load.image('rocket', "./assets/rocketC.png");
         this.load.image("spaceship", "./assets/spaceship.png");
         this.load.image("starfield", "./assets/starfield.png");
-        this.load.image("meteor", "./assets/meteor.png"); //loadMeteor
+        this.load.image("meteor", "./assets/meteor.png"); 
         this.load.spritesheet('explosion', './assets/explosion.png', 
         {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
@@ -39,7 +39,7 @@ class Play extends Phaser.Scene{
         this.ship03 = new Spaceship(this, game.config.width + 192, 332, `spaceship`, 0, 10)
         .setOrigin(0,0);
 
-        this.meteor01 = new Meteor(this, -300, 60, `meteor`, 0, 100)
+        this.meteor01 = new Meteor(this, -300, 100, `meteor`, 0, 100)
         .setOrigin(0,0);
 
         //Controls initiation
@@ -74,7 +74,11 @@ class Play extends Phaser.Scene{
         this.scoreLeft = this.add.text
         (69, 54, this.p1Score, scoreConfig);
 
-        //set game over flag
+        //sets up timer
+        this.scoreRight = this.add.text
+        (game.config.width-scoreConfig.fixedWidth-69, 54, this.clock, scoreConfig);//flag
+
+        //set game over check
         this.gameOver = false;
 
         //Play Clock 60 seconds
