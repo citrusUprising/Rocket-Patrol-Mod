@@ -46,6 +46,7 @@ class Play extends Phaser.Scene{
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
         //Config animation
         this.anims.create({
@@ -112,7 +113,7 @@ class Play extends Phaser.Scene{
        this.meteor01.update();
        }
 
-       //check collisions
+       //check collisions and detonations
        if(this.checkCollision(this.p1rocket, this.ship03)){
             this.p1rocket.reset();
             this.shipExplode(this.ship03);
@@ -129,6 +130,21 @@ class Play extends Phaser.Scene{
             this.p1rocket.reset();
             this.shipExplode(this.meteor01);
         }
+
+        //flag
+        /* if(this.checkExplosion(this.detonation, this.ship03)){
+            this.shipExplode(this.ship03);
+       }
+       if(this.checkExplosion(this.detonation, this.ship02)){
+            this.shipExplode(this.ship02);
+        }
+        if(this.checkExplosion(this.detonation, this.ship01)){
+            this.shipExplode(this.ship01);
+        }
+        if(this.checkExplosion(this.detonation, this.meteor01)){
+            this.shipExplode(this.meteor01);
+        }
+        */
     }
     checkCollision(rocket, ship){
         //AABB Setup and check
@@ -142,7 +158,20 @@ class Play extends Phaser.Scene{
         }
     }
 
-    shipExplode(ship) {
+    //flag
+    /* checkExplosion(detonate, ship){
+        //AABB Setup and check
+        if(detonate.x < ship.x + ship.width &&
+        detonate.x + detonate.width > ship.x &&
+        detonate.y < ship.y + ship.height &&
+        detonate.height + detonate.y > ship.y){
+            return true;     
+        } else {
+          return false;
+        }
+    }*/
+
+    shipExplode(ship) {  
         ship.alpha = 0; //makes ship invisible
 
         //create explosion sprite at sheet positions
@@ -152,7 +181,7 @@ class Play extends Phaser.Scene{
             ship.reset();
             ship.alpha = 1;
             boom.destroy();
-        });
+        });//flag copy for detonation
 
         //score increment and update
         this.p1Score += ship.points;

@@ -32,6 +32,14 @@ class Rocket extends Phaser.GameObjects.Sprite {
             this.y -=5;
         }
 
+        //flag
+        //detonation
+        if(this.isFiring && Phaser.Input.Keyboard.JustDown(keyUP)){
+            //add explosion summoning code 
+            this.reset();
+        }
+        
+
         //reset miss
         if(this.y <=108){
             /*this.isFiring = false;
