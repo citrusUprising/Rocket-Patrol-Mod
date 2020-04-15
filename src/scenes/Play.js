@@ -8,6 +8,7 @@ class Play extends Phaser.Scene{
         this.load.image('rocket', "./assets/rocket.png");
         this.load.image("spaceship", "./assets/spaceship.png");
         this.load.image("starfield", "./assets/starfield.png");
+        this.load.image("meteor", "./assets/meteor.png"); //loadMeteor
         this.load.spritesheet('explosion', './assets/explosion.png', 
         {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
@@ -36,6 +37,9 @@ class Play extends Phaser.Scene{
         this.ship02 = new Spaceship(this, game.config.width +96, 232, `spaceship`, 0, 20)
         .setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width + 192, 332, `spaceship`, 0, 10)
+        .setOrigin(0,0);
+
+        this.meteor01 = new Meteor(this, -300, 60, `meteor`, 0, 100)
         .setOrigin(0,0);
 
         //Controls initiation
@@ -101,6 +105,7 @@ class Play extends Phaser.Scene{
        this.ship01.update(); //updates ships
        this.ship02.update();
        this.ship03.update();
+       this.meteor01.update();
        }
 
        //check collisions
@@ -115,6 +120,10 @@ class Play extends Phaser.Scene{
         if(this.checkCollision(this.p1rocket, this.ship01)){
             this.p1rocket.reset();
             this.shipExplode(this.ship01);
+        }
+        if(this.checkCollision(this.p1rocket, this.meteor01)){
+            this.p1rocket.reset();
+            this.shipExplode(this.meteor01);
         }
     }
     checkCollision(rocket, ship){
