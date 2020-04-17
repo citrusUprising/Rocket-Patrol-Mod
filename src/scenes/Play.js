@@ -6,9 +6,9 @@ class Play extends Phaser.Scene{
     preload(){
         //loads images and tile sprites
         this.load.image('rocket', "./assets/rocketC.png");
-        this.load.image("spaceship", "./assets/spaceship.png");
+        this.load.image("spaceship", "./assets/spaceshipC.png");
         this.load.image("starfield", "./assets/starfield.png");
-        this.load.image("meteor", "./assets/meteor.png"); 
+        this.load.image("meteor", "./assets/meteorD.png"); 
         this.load.spritesheet('explosion', './assets/explosion.png', 
         {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
@@ -132,20 +132,21 @@ class Play extends Phaser.Scene{
         }
 
         //flag
-        /* if(this.checkExplosion(this.detonation, this.ship03)){
+        /*if(this.checkExplosion(this.boom, this.ship03)){
             this.shipExplode(this.ship03);
        }
-       if(this.checkExplosion(this.detonation, this.ship02)){
+       if(this.checkExplosion(this.boom, this.ship02)){
             this.shipExplode(this.ship02);
         }
-        if(this.checkExplosion(this.detonation, this.ship01)){
+        if(this.checkExplosion(this.boom, this.ship01)){
             this.shipExplode(this.ship01);
         }
-        if(this.checkExplosion(this.detonation, this.meteor01)){
+        if(this.checkExplosion(this.boom, this.meteor01)){
             this.shipExplode(this.meteor01);
-        }
-        */
+        }*/
+
     }
+
     checkCollision(rocket, ship){
         //AABB Setup and check
         if(rocket.x < ship.x + ship.width &&
@@ -158,13 +159,15 @@ class Play extends Phaser.Scene{
         }
     }
 
-    //flag
-    /* checkExplosion(detonate, ship){
+    //.setActive(false).setVisible(false); //flag explosion sprite
+
+    //flag Boom need definition first
+     /*checkExplosion(sprite, ship){
         //AABB Setup and check
-        if(detonate.x < ship.x + ship.width &&
-        detonate.x + detonate.width > ship.x &&
-        detonate.y < ship.y + ship.height &&
-        detonate.height + detonate.y > ship.y){
+        if(boom.x < ship.x + ship.width &&
+        boom.x + boom.width > ship.x &&
+        boom.y < ship.y + ship.height &&
+        boom.height + boom.y > ship.y){
             return true;     
         } else {
           return false;

@@ -34,13 +34,15 @@ class Menu extends Phaser.Scene{
          'ROCKET PATROL', menuConfig)
         .setOrigin(0.5);
         this.add.text(centerX, centerY,
-         'Use ← → arrows to move & SPACE to Fire', menuConfig)
+         'Use ← → arrows to move,', menuConfig)
         .setOrigin(0.5);
-
+        this.add.text(centerX, centerY + textSpacer,
+            'SPACE to Fire, & ↑ to Detonate', menuConfig)
+           .setOrigin(0.5);
 
        menuConfig.backgroundColor = "#00FF00";
         menuConfig.color = "#000000";
-        this.add.text(centerX, centerY + textSpacer,
+        this.add.text(centerX, centerY + 2*textSpacer,
          'Press for ← Easy or → for Hard', menuConfig)
         .setOrigin(0.5);
 

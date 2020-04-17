@@ -10,6 +10,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
         //Rocket sound
         this.sfxRocket = scene.sound.add('sfx_rocket');
+
+        //set detonate flag
+        this.detonate = false;
     }
 
     update(){
@@ -35,7 +38,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
         //flag
         //detonation
         if(this.isFiring && Phaser.Input.Keyboard.JustDown(keyUP)){
-            //add explosion summoning code 
+            this.detonate = true;
             this.reset();
         }
         
