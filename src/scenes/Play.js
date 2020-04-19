@@ -42,8 +42,8 @@ class Play extends Phaser.Scene{
         this.meteor01 = new Meteor(this, -300, 100, `meteor`, 0, 100)
         .setOrigin(0,0);
 
-        this.detonation = new Detonation(this, -100, -100, 'explosion', 0).setOrigin(0,0); //flag
-        this.detonation.setActive(false).setVisible(false); //flag explosion sprite
+        this.detonation = new Detonation(this, -100, -100, 'explosion', 0).setOrigin(0,0); //sets up detonation hitbox off screen
+        this.detonation.setActive(false).setVisible(false); //explosion sprite
 
         //Controls initiation
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -82,6 +82,7 @@ class Play extends Phaser.Scene{
 
         //set game over check
         this.gameOver = false;
+        //this.uptick = 0; //flag
 
         //Play Clock 60 seconds
         scoreConfig.fixedWidth = 0;
@@ -95,16 +96,18 @@ class Play extends Phaser.Scene{
         }, null, this);
 
              //sets up timer
-             this.stopWatch = 60;
+             this.stopWatch = game.settings.gameTimer;
+             this.stopWatchDisplay = this.stopWatch/1000;
              this.scoreRight = this.add.text
-             (game.config.width-scoreConfig.fixedWidth-75, 54, this.stopWatch, scoreConfig);//flag
+             (game.config.width-scoreConfig.fixedWidth-75, 54, this.stopWatchDisplay, scoreConfig);
     
     }
 
     update(){
 
-        this.stopWatch = (game.settings.gameTimer-this.clock.getElapsed())/1000;
-        console.log(this.stopWatch);
+        this.stopWatch = game.settings.gameTimer-this.clock.getElapsed();
+        this.stopWatchDisplay = Math.trunc((this.stopWatch+999)/1000);
+        this.scoreRight.setText(this.stopWatchDisplay);
 
         //check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keySPACE)){
@@ -147,7 +150,7 @@ class Play extends Phaser.Scene{
             this.rocketDetonate(this.p1rocket, this.detonation);
         }
 
-        //flag
+        //runs checks for rocket detonation touching ships
         if(this.checkExplosion(this.detonation, this.ship03)){
             this.shipExplode(this.ship03);
        }
@@ -175,9 +178,7 @@ class Play extends Phaser.Scene{
         }
     }
 
-    
-
-    //flag 
+    //overlap check for detonation and ships
      checkExplosion(detonation, ship){
         //AABB Setup and check
         if(detonation.x < ship.x + ship.width &&
@@ -190,6 +191,7 @@ class Play extends Phaser.Scene{
         }
     }
 
+    //spawns explosion and moves detonation to rocket
     rocketDetonate(rocket, detonation){
         let targetX = rocket.x-16;
         let targetY = rocket.y-16;
@@ -197,7 +199,7 @@ class Play extends Phaser.Scene{
         detonation.setActive(true);
         detonation.x = targetX;
         detonation.y = targetY;
-        let boom = this.add.sprite(targetX, targetY, 'explosion').setOrigin(0, 0);//flag
+        let boom = this.add.sprite(targetX, targetY, 'explosion').setOrigin(0, 0);
         boom.anims.play('explode'); //plays explosion
         boom.on('animationcomplete', () => {
             detonation.x = -100;
@@ -220,10 +222,11 @@ class Play extends Phaser.Scene{
             ship.alpha = 1;
             target = 0;
             boom.destroy();
-        });//flag copy for detonation
+        });
 
         //score increment and update
         this.p1Score += ship.points;
+        //this.uptick += ship.points*10; //flag
         this.scoreLeft.text = this.p1Score;
         this.sound.play('sfx_explosion'); //plays explosion effect
     }
