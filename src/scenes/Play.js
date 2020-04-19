@@ -9,7 +9,7 @@ class Play extends Phaser.Scene{
         this.load.image("spaceship", "./assets/spaceshipC.png");
         this.load.image("starfield", "./assets/starfield.png");
         this.load.image("meteor", "./assets/meteorD.png"); 
-        this.load.spritesheet('explosion', './assets/explosion.png', 
+        this.load.spritesheet('explosion', './assets/explosionA.png', 
         {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
     }
 
@@ -41,6 +41,9 @@ class Play extends Phaser.Scene{
 
         this.meteor01 = new Meteor(this, -300, 100, `meteor`, 0, 100)
         .setOrigin(0,0);
+
+        this.detonation = new Detonation(this, -100, -100, 'explosion', 0).setOrigin(0,0); //flag
+        this.detonation.setActive(false).setVisible(false); //flag explosion sprite
 
         //Controls initiation
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -77,7 +80,7 @@ class Play extends Phaser.Scene{
 
         //sets up timer
         this.scoreRight = this.add.text
-        (game.config.width-scoreConfig.fixedWidth-69, 54, this.clock, scoreConfig);//flag
+        //(game.config.width-scoreConfig.fixedWidth-69, 54, this.clock.getCurrentTime, scoreConfig);//flag
 
         //set game over check
         this.gameOver = false;
@@ -111,6 +114,7 @@ class Play extends Phaser.Scene{
        this.ship02.update();
        this.ship03.update();
        this.meteor01.update();
+       this.detonation.update();
        }
 
        //check collisions and detonations
@@ -131,19 +135,23 @@ class Play extends Phaser.Scene{
             this.shipExplode(this.meteor01);
         }
 
+        if(this.p1rocket.detonate == true){
+            this.rocketDetonate(this.p1rocket, this.detonation);
+        }
+
         //flag
-        /*if(this.checkExplosion(this.boom, this.ship03)){
+        if(this.checkExplosion(this.detonation, this.ship03)){
             this.shipExplode(this.ship03);
        }
-       if(this.checkExplosion(this.boom, this.ship02)){
+       if(this.checkExplosion(this.detonation, this.ship02)){
             this.shipExplode(this.ship02);
         }
-        if(this.checkExplosion(this.boom, this.ship01)){
+        if(this.checkExplosion(this.detonation, this.ship01)){
             this.shipExplode(this.ship01);
         }
-        if(this.checkExplosion(this.boom, this.meteor01)){
+        if(this.checkExplosion(this.detonation, this.meteor01)){
             this.shipExplode(this.meteor01);
-        }*/
+        }
 
     }
 
@@ -159,30 +167,50 @@ class Play extends Phaser.Scene{
         }
     }
 
-    //.setActive(false).setVisible(false); //flag explosion sprite
+    
 
-    //flag Boom need definition first
-     /*checkExplosion(sprite, ship){
+    //flag 
+     checkExplosion(detonation, ship){
         //AABB Setup and check
-        if(boom.x < ship.x + ship.width &&
-        boom.x + boom.width > ship.x &&
-        boom.y < ship.y + ship.height &&
-        boom.height + boom.y > ship.y){
+        if(detonation.x < ship.x + ship.width &&
+        detonation.x + detonation.width > ship.x &&
+        detonation.y < ship.y + ship.height &&
+        detonation.height + detonation.y > ship.y){
             return true;     
         } else {
           return false;
         }
-    }*/
+    }
+
+    rocketDetonate(rocket, detonation){
+        let targetX = rocket.x-16;
+        let targetY = rocket.y-16;
+        rocket.reset();
+        detonation.setActive(true);
+        detonation.x = targetX;
+        detonation.y = targetY;
+        let boom = this.add.sprite(targetX, targetY, 'explosion').setOrigin(0, 0);//flag
+        boom.anims.play('explode'); //plays explosion
+        boom.on('animationcomplete', () => {
+            detonation.x = -100;
+            detonation.y = -100;
+            detonation.setActive(false);
+            boom.destroy();
+        });
+    }
 
     shipExplode(ship) {  
         ship.alpha = 0; //makes ship invisible
+        let target = ship.x;
+        //console.log(target);
+        ship.reset();
 
         //create explosion sprite at sheet positions
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+        let boom = this.add.sprite(target, ship.y, 'explosion').setOrigin(0, 0);
         boom.anims.play('explode'); //plays explosion
         boom.on('animationcomplete', () => {
-            ship.reset();
             ship.alpha = 1;
+            target = 0;
             boom.destroy();
         });//flag copy for detonation
 
