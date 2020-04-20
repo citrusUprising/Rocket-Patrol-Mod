@@ -80,19 +80,17 @@ class Play extends Phaser.Scene{
 
        
 
-        //set game over check
+        //set game over and bonus checks
         this.gameOver = false;
-        //this.uptick = 0; //flag
-
+        this.bonusTime = false;
+        this.uptick = 0; 
+ 
         //Play Clock 60 seconds
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width/2, game.config.height/2, 
-            'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 
-            'Hit Space to Restart or ← for Menu', scoreConfig).setOrigin(0.5); 
-            this.gameOver = true;
-            console.log(this.gameOver);
+                'BONUS TIME', scoreConfig).setOrigin(0.5);
+                this.bonusTime = true; //start bonus time
         }, null, this);
 
              //sets up timer
@@ -105,8 +103,23 @@ class Play extends Phaser.Scene{
 
     update(){
 
-        this.stopWatch = game.settings.gameTimer-this.clock.getElapsed();
-        this.stopWatchDisplay = Math.trunc((this.stopWatch+999)/1000);
+        if(this.bonusTime){
+            this.bonusClock = this.time.delayedCall(this.uptick, () => { 
+                this.add.text(game.config.width/2, game.config.height/2, 
+                'GAME OVER', this.scoreConfig).setOrigin(0.5); //flag score Config not loading
+                this.add.text(game.config.width/2, game.config.height/2 + 64, 
+                'Hit Space to Restart or ← for Menu', this.scoreConfig).setOrigin(0.5); //flag score Config not loading
+                this.bonusTime = false; 
+                this.gameOver = true;
+            }, null, this);
+            console.log(this.bonusClock.getElapsed()); //prints 0 flag
+            this.stopWatch = this.uptick-this.bonusClock.getElapsed(); //getElapsed not working
+            this.stopWatchDisplay = Math.trunc((this.stopWatch+999)/1000);
+        } else {
+            this.stopWatch = game.settings.gameTimer-this.clock.getElapsed();
+            this.stopWatchDisplay = Math.trunc((this.stopWatch+999)/1000);
+        }
+
         this.scoreRight.setText(this.stopWatchDisplay);
 
         //check key input for restart
@@ -226,7 +239,7 @@ class Play extends Phaser.Scene{
 
         //score increment and update
         this.p1Score += ship.points;
-        //this.uptick += ship.points*10; //flag
+        if(!this.bonusTime)this.uptick += ship.points*10; //flag
         this.scoreLeft.text = this.p1Score;
         this.sound.play('sfx_explosion'); //plays explosion effect
     }
