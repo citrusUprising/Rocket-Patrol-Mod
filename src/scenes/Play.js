@@ -91,6 +91,14 @@ class Play extends Phaser.Scene{
             this.add.text(game.config.width/2, game.config.height/2, 
                 'BONUS TIME', scoreConfig).setOrigin(0.5);
                 this.bonusTime = true; //start bonus time
+                this.bonusClock = this.time.delayedCall(this.uptick, () => { 
+                    this.add.text(game.config.width/2, game.config.height/2, 
+                    'MISSION END. GAME OVER', scoreConfig).setOrigin(0.5); //flag score Config not loading
+                    this.add.text(game.config.width/2, game.config.height/2 + 64, 
+                    'Hit Space to Restart or ← for Menu', scoreConfig).setOrigin(0.5); //flag score Config not loading
+                    this.bonusTime = false; 
+                    this.gameOver = true;
+                }, null, this);
         }, null, this);
 
              //sets up timer
@@ -104,16 +112,7 @@ class Play extends Phaser.Scene{
     update(){
 
         if(this.bonusTime){
-            this.bonusClock = this.time.delayedCall(this.uptick, () => { 
-                this.add.text(game.config.width/2, game.config.height/2, 
-                'GAME OVER', this.scoreConfig).setOrigin(0.5); //flag score Config not loading
-                this.add.text(game.config.width/2, game.config.height/2 + 64, 
-                'Hit Space to Restart or ← for Menu', this.scoreConfig).setOrigin(0.5); //flag score Config not loading
-                this.bonusTime = false; 
-                this.gameOver = true;
-            }, null, this);
-            console.log(this.bonusClock.getElapsed()); //prints 0 flag
-            this.stopWatch = this.uptick-this.bonusClock.getElapsed(); //getElapsed not working
+            this.stopWatch = this.uptick-this.bonusClock.getElapsed(); 
             this.stopWatchDisplay = Math.trunc((this.stopWatch+999)/1000);
         } else {
             this.stopWatch = game.settings.gameTimer-this.clock.getElapsed();
