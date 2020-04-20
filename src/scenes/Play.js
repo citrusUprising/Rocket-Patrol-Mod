@@ -18,12 +18,6 @@ class Play extends Phaser.Scene{
 
         this.starfield = this.add.tileSprite(0, 0, 640, 480, "starfield").setOrigin(0,0);
 
-        //white rectangle
-        this.add.rectangle(5, 5, 630, 32, 0xffffff).setOrigin(0, 0);
-        this.add.rectangle(5, 443, 630, 32, 0xffffff).setOrigin(0, 0);
-        this.add.rectangle(5, 5, 32, 455, 0xffffff).setOrigin(0, 0);
-        this.add.rectangle(603, 5, 32, 455, 0xffffff).setOrigin(0, 0);
-
         //green rectangle
         this.add.rectangle(37, 42, 566, 64, 0x00ff00).setOrigin(0,0);
         
@@ -41,6 +35,12 @@ class Play extends Phaser.Scene{
 
         this.meteor01 = new Meteor(this, -300, 100, `meteor`, 0, 100)
         .setOrigin(0,0);
+
+        //white rectangle borders
+        this.add.rectangle(5, 5, 630, 32, 0xffffff).setOrigin(0, 0);
+        this.add.rectangle(5, 443, 630, 32, 0xffffff).setOrigin(0, 0);
+        this.add.rectangle(5, 5, 32, 455, 0xffffff).setOrigin(0, 0);
+        this.add.rectangle(603, 5, 32, 455, 0xffffff).setOrigin(0, 0);
 
         this.detonation = new Detonation(this, -100, -100, 'explosion', 0).setOrigin(0,0); //sets up detonation hitbox off screen
         this.detonation.setActive(false).setVisible(false); //explosion sprite
